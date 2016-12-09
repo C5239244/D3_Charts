@@ -63,9 +63,16 @@ html, body, #graph {
     }
     
     function drawChart(data) {
-        function edgeForce(origin) {
+        function edgeForce(origin, strength) {
+          var nodes;
+          
           function force(alpha) {
-            
+            nodes.forEach(function(node) {
+              var distance = strength / (origin - node.x);
+              
+              console.log(distance);
+              node.x -= distance;
+            })
           }
           
           force.initialize = function(_) {
@@ -82,7 +89,8 @@ html, body, #graph {
             .force("center", d3.forceCenter(chartWidth / 4, chartHeight / 2))
             .force("y", d3.forceY(0))
             .force("x", d3.forceX(-chartWidth))
-        .force('edge', edgeForce(0))
+        .force('edge-left', edgeForce(0, 1000))
+        .force('edge-right', edgeForce(chartWidth, 1000))
     
         var link = svg.append("g")
             .attr("class", "links")
